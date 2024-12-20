@@ -6,6 +6,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField,SubmitField,FileField,IntegerField
 from wtforms.validators import DataRequired
 from flask_wtf.file import FileRequired,FileAllowed
+import json
 import io 
 app.config['SECRET_KEY']="abc"
 login_manager=LoginManager()
@@ -83,10 +84,14 @@ def imageProcess(id):
 def loader_user(user_id):
     return users.query.get(user_id)
 
+
+
 @app.route('/get_receipe/<int:id>')
 def getReceipe(id):
     getData=post_receipe.query.get(id)
     return render_template('getData.html',data=getData)
+
+
 
 @app.route('/add_comment/<int:id>',methods=["POST","GET"])
 @login_required
@@ -96,11 +101,25 @@ def add_comment(id):
 
     if request.method=="POST":
         comment=request.form.get('comment')
-        abc.comment += f"\n{name}: {comment}"  # Include username to track who commented
-        db.session.commit()
+        if abc.comment == "" or abc.comment is None:
+            # Initialize list if comment is empty
+            lst = [{'name': name, 'comment': comment}]
+            stored_value = json.dumps(lst)  # Convert list to JSON string
+            abc.comment = stored_value  # Store JSON string
+            db.session.commit()
+
+        else:
+            # Retrieve existing comment list
+            retrieved_value = abc.comment
+            retrieved_list = json.loads(retrieved_value)  # Convert JSON string back to list
+            retrieved_list.append({'name': name, 'comment': comment})  # Append new item
+            abc.comment = json.dumps(retrieved_list)  # Convert list back to JSON string before saving
+            db.session.commit()
+
+        print(abc.comment)
         return redirect(url_for('add_comment',id=id))
     elif request.method=="GET":
-        return render_template('getData.html',data=abc,name=name)
+        return render_template('getData.html',data=abc,name=name,lst1=)
 
 
 with app.app_context():
