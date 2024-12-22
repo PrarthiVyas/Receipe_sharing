@@ -10,7 +10,7 @@ import json
 import io 
 app.config['SECRET_KEY']="abc"
 login_manager=LoginManager()
-login_manager.login_view='login' # If user is not authenticated, they will be redirected 
+login_manager.login_view='login' # If user is not authenticated, they will be redirected here
 login_manager.init_app(app) # Connects Flask-Login to your Flask app
 
 
