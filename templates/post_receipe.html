@@ -1,0 +1,256 @@
+{% extends 'layout.html' %}
+{% block title %}
+Find Meals For Your Ingredients
+{% endblock %}
+{% block style %}
+<style>
+  /* Global Styles */
+  body {
+    font-family: "Roboto", sans-serif;
+    background: linear-gradient(135deg, #eef2f3, #8e9eab, #dfe6e9);
+    color: #2c3e50;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Navigation Bar */
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background: #2c3e50;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .navbar a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2em;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+  }
+
+  .navbar a:hover {
+    background: #34495e;
+  }
+
+  /* Search Section */
+  .search-section h1 {
+    font-size: 2.5em;
+    color: #2c3e50;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .search-section p {
+    font-size: 1.2em;
+    color: #555;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .search-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px;
+  }
+
+  .search-box input[type="text"] {
+    width: 60%;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 5px 0 0 5px;
+    font-size: 16px;
+    outline: none;
+  }
+
+  .search-box button {
+    padding: 10px 20px;
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  .search-box button:hover {
+    background-color: #34495e;
+  }
+
+  /* Posts Grid */
+  .posts-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+
+  .post-card {
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    width: 280px;
+    transition: transform 0.3s ease;
+    overflow: hidden;
+  }
+
+  .post-card:hover {
+    transform: scale(1.05);
+  }
+
+  .post-image img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+  }
+
+  .post-title {
+    font-size: 1.3em;
+    color: #2c3e50;
+    margin: 15px 10px 5px;
+  }
+
+  .post-description {
+    font-size: 1em;
+    color: #555;
+    margin: 0 10px 10px;
+  }
+
+  .get-recipe-button {
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+    display: block;
+    margin: 10px auto 15px;
+    padding: 8px 0;
+    width: 80%;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  .get-recipe-button:hover {
+    background-color: #34495e;
+  }
+
+  /* Add Recipe Form */
+  .post-form {
+    background-color: #ffffff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    margin-bottom: 40px;
+    text-align: left;
+  }
+
+  .post-form h2 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  .form-group label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  .form-group button {
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+  }
+
+  .form-group button:hover {
+    background-color: #34495e;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Navigation Bar -->
+<div class="navbar">
+  <a href="{{ url_for('addPost') }}">Home</a>
+  <a href="{{ url_for('logout') }}">Logout</a>
+</div>
+
+<div class="container">
+  <!-- Search Section -->
+  <div class="search-section">
+    <h1>Find Meals For Your Ingredients</h1>
+    <p>
+      Real food doesn't have ingredients, real food *is* ingredients. <br /><em>- Jamie Oliver</em>
+    </p>
+    <div class="search-box">
+      <input type="text" placeholder="Search for an ingredient..." />
+      <button type="submit">
+        <i class="fa fa-search"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Add Recipe Form -->
+  <div class="post-form">
+    <h2>Share Your Recipe</h2>
+    <form method="POST" action="/add_post" enctype="multipart/form-data">
+      {{ form.hidden_tag() }}
+      <div class="form-group">
+        <label for="PT">{{ form.PT.label }}</label>
+        {{ form.PT }}
+      </div>
+
+      <div class="form-group">
+        <label for="PD">{{ form.PD.label }}</label>
+        {{ form.PD }}
+      </div>
+
+      <div class="form-group">
+        <label for="image">{{ form.image.label }}</label>
+        {{ form.image }}
+      </div>
+
+      <div class="form-group">
+        <button type="submit">{{ form.submit.label.text }}</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Recipe Cards -->
+  <div class="posts-container">
+    {% for i in data %}
+    <div class="post-card">
+      <div class="post-image">
+        <img src="{{ url_for('imageProcess', id=i.id) }}" alt="Recipe Image" />
+      </div>
+      <h3 class="post-title">{{ i.post_title }}</h3>
+      <p class="post-description">{{ i.post_description }}</p>
+      <a href="{{url_for('getReceipe',id=i.id)}}" class="get-recipe-button">
+        Get Recipe
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
