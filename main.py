@@ -183,7 +183,8 @@ def search():
             # Perform the query with the 'item' variable
             data = post_receipe.query.filter(post_receipe.post_title.like(f'{item}%')).all()
             for post in data:
-                print(post.post_title)  # Access post_title of each post 
+                print(post.post_title)  # Access post_title of each post
+    
     # Render the template with the form and the data (whether empty or with search results)
     return render_template('post_receipe.html', form=form, data=data)
 
