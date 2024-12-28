@@ -60,4 +60,6 @@ This is a Flask-based web application that allows users to sign up, log in, and 
 - `table.py`: This file contains the database models for the application. It defines the structure of the database tables using SQLAlchemy, including users, post_receipe, comments, and likes models. These models are used to interact with the database, store user and recipe data, and track interactions like comments and likes.
 
 
+## Screenshots
+
 
