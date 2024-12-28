@@ -20,6 +20,12 @@ class addPosts(FlaskForm):
     image=FileField("Image",validators=[FileRequired(message="This file is required"),FileAllowed(['jpg','png'],'Only Images are Allowed')])
     submit = SubmitField("Submit")
 
+class editPosts(FlaskForm):
+    PT1=StringField('Post Title',validators=[DataRequired()])
+    PD1=StringField('Post Description',validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
+
 @app.route('/signup',methods=['GET','POST'])
 def signup():
     flag=False
@@ -65,7 +71,6 @@ def addPost():
     abc=post_receipe.query.all()
 
     if form.validate_on_submit():
-        print('hiiiii')
         pt=form.PT.data
         pd=form.PD.data
         image=form.image.data
@@ -119,8 +124,6 @@ def likePost(id):
     flag=0
     post_likes = likes.query.filter_by(post_receipe_id=id)
     main_post=post_receipe.query.get(id)
-
-
     if post_likes is None:
         add_likes=likes(user_id=current_user.id,post_receipe_id=id,like=1)
         db.session.add(add_likes)
@@ -143,6 +146,47 @@ def likePost(id):
 def showData():
     data=post_receipe.query.filter_by(user_id=current_user.id)
     return render_template('showData.html',data=data)
+
+
+@app.route("/editPost/<int:id>",methods=["POST","GET"])
+def editPost(id):
+    form=editPosts()
+    abc=post_receipe.query.filter_by(id=id).first()
+    print(".................",abc.post_title)
+
+    if form.validate_on_submit():
+        abc.post_title=form.PT1.data
+        print(abc.post_title)
+        abc.post_description=form.PD1.data
+        db.session.commit()
+        return redirect(url_for('showData'))
+    else:
+        print(form.errors) 
+    return render_template('editPost.html',form=form,data=abc,id=id)
+
+@app.route('/deletePost/<int:id>')
+def deletePost(id):
+    data=post_receipe.query.get(id)
+    db.session.delete(data)
+    db.session.commit()
+    return redirect(url_for('showData'))
+
+@app.route("/search", methods=["POST", "GET"])
+def search():
+    form = addPosts()
+    data = []  # Initialize data to ensure it's always passed to the template
+    
+    if request.method == "POST":
+        item = request.form.get('ingredient')
+        
+        if item:  # Ensure there's a valid ingredient provided
+            # Perform the query with the 'item' variable
+            data = post_receipe.query.filter(post_receipe.post_title.like(f'{item}%')).all()
+            for post in data:
+                print(post.post_title)  # Access post_title of each post 
+    # Render the template with the form and the data (whether empty or with search results)
+    return render_template('post_receipe.html', form=form, data=data)
+
 
 
 with app.app_context():
