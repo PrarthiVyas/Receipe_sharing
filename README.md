@@ -94,6 +94,15 @@ This is a Flask-based web application that allows users to sign up, log in, and 
 ![image](https://github.com/user-attachments/assets/dc9f3456-d261-4e65-8c3a-da014a328c54)
 ![image](https://github.com/user-attachments/assets/fa4e578a-e892-40df-b1aa-8458518935dc)
 ![image](https://github.com/user-attachments/assets/44d5a6fb-2f18-4572-bc47-6cc60826d749)
+![image](https://github.com/user-attachments/assets/fe978bb9-e920-45c6-a37a-0b761d11c268)
+![image](https://github.com/user-attachments/assets/7d2671e1-7191-4e25-8c89-32ed5e7c046e)
+![image](https://github.com/user-attachments/assets/dc390050-282c-413c-be5d-79bc404591b9)
+![image](https://github.com/user-attachments/assets/84020635-bb41-4914-90df-689f5a001be7)
+![image](https://github.com/user-attachments/assets/1e2a64f9-9e2f-471b-ad4d-20d2c801de30)
+
+
+
+
 
 
 
